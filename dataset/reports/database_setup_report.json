@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-09-19T13:20:23.926755",
+  "status": "DATABASE_IMPORT_COMPLETE",
+  "supabase_url": "https://gzrirhynwnapjwdrsejz.supabase.co",
+  "imported": {
+    "network_nodes": 120,
+    "network_segments": 436,
+    "signal_plans": 89,
+    "planning_candidates": 90
+  }
+}

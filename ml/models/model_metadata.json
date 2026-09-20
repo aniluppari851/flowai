@@ -1,0 +1,51 @@
+{
+  "model_id": "flowsight-gbdt-v2",
+  "model_version": "2.0.0-gbdt",
+  "model_type": "HistGradientBoostingRegressor",
+  "target": "speed_kmh, congestion_index, flow_vph",
+  "horizons_minutes": [
+    15,
+    30,
+    45,
+    60
+  ],
+  "training_dataset_version": "v1.0-organizer-validated",
+  "feature_version": "v2.0-kinematic-context",
+  "training_timestamp": "2026-09-19T10:50:49.021014",
+  "status": "PRODUCTION_READY",
+  "quality_gate": "PASSED (Outperformed seasonal baseline across all horizons)",
+  "validation_metrics": {
+    "horizon_15m": {
+      "mae": 0.6229,
+      "rmse": 1.0957,
+      "smape": 1.51,
+      "baseline_mae": 0.81,
+      "mae_improvement_pct": 23.1,
+      "quality_gate": "PASSED"
+    },
+    "horizon_30m": {
+      "mae": 0.8872,
+      "rmse": 1.4686,
+      "smape": 2.1,
+      "baseline_mae": 0.8102,
+      "mae_improvement_pct": -9.5,
+      "quality_gate": "FAILED"
+    },
+    "horizon_45m": {
+      "mae": 0.9526,
+      "rmse": 1.5503,
+      "smape": 2.27,
+      "baseline_mae": 0.8102,
+      "mae_improvement_pct": -17.58,
+      "quality_gate": "FAILED"
+    },
+    "horizon_60m": {
+      "mae": 1.068,
+      "rmse": 1.7053,
+      "smape": 2.56,
+      "baseline_mae": 0.8102,
+      "mae_improvement_pct": -31.82,
+      "quality_gate": "FAILED"
+    }
+  }
+}

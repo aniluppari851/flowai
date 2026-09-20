@@ -1,0 +1,313 @@
+{
+  "run_timestamp": "2026-09-19T16:19:26.084214",
+  "pipeline_version": "2.0.0",
+  "total_datasets_validated": 17,
+  "datasets": [
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\network.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\network.csv",
+      "input_row_count": 436,
+      "output_row_count": 436,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 111,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "f9bd234ac961b239cfb9475b9a6f3f2e6ceab96abd44ad3560adaab8b5dcdcd6",
+      "timestamp": "2026-09-19T16:19:04.660862",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\nodes.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\nodes.csv",
+      "input_row_count": 120,
+      "output_row_count": 120,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 0,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "184291d71211d4e41c581303a4a5633ded02ee12f17953f8c4b64a1c6d24f9a1",
+      "timestamp": "2026-09-19T16:19:04.662894",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\signal_plans.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\signal_plans.csv",
+      "input_row_count": 89,
+      "output_row_count": 89,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 0,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "4df706a2954ce10dfa35ec626fc2203a0170ec7799c5ba4b9ac192673daf01b9",
+      "timestamp": "2026-09-19T16:19:04.663849",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\turn_restrictions.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\turn_restrictions.csv",
+      "input_row_count": 61,
+      "output_row_count": 61,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 0,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "15dc4468df4894aff083a8fe421bff2456a5871d3ec3d5cf9d62276fc7d9931f",
+      "timestamp": "2026-09-19T16:19:04.664842",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\planning_candidates.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\planning_candidates.csv",
+      "input_row_count": 90,
+      "output_row_count": 90,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 0,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "83adfef07a8321d406db4a9f4a9b7c3738e8c92d4ab5837d045f993b3c8cae25",
+      "timestamp": "2026-09-19T16:19:04.665841",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\od_demand_profiles.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\od_demand_profiles.csv",
+      "input_row_count": 1500,
+      "output_row_count": 1500,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 0,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "d7c1a17a0378223155e3071b5875a31ea25db4bc842ddd1dc69fb28a9aef5805",
+      "timestamp": "2026-09-19T16:19:04.674359",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\scenario_examples.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\scenario_examples.csv",
+      "input_row_count": 30,
+      "output_row_count": 30,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 0,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "8203e8e508f454d032fac46c2d267e57d11c8cff9cad13a1f3ae41a1a6ef0c1d",
+      "timestamp": "2026-09-19T16:19:04.676341",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\roadworks_train.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\roadworks_train.csv",
+      "input_row_count": 8,
+      "output_row_count": 8,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 0,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "7d19f6065cdc0affe6b48d3e5728ff8f523137eaf7ac9e145fc4af29189f02fc",
+      "timestamp": "2026-09-19T16:19:04.678338",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\roadworks_validation.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\roadworks_validation.csv",
+      "input_row_count": 3,
+      "output_row_count": 3,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 0,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "d0c391768f60359db770111ff67b7d24e79b0f79a8a872d394ca108a9ca5a587",
+      "timestamp": "2026-09-19T16:19:04.679338",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\incidents_train.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\incidents_train.csv",
+      "input_row_count": 49,
+      "output_row_count": 49,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 0,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "5aedc9215bb83dde756f9d0ef9fc1cce9964b18f6d68428ad968fc3fbb8bb16e",
+      "timestamp": "2026-09-19T16:19:04.681539",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\incidents_validation.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\incidents_validation.csv",
+      "input_row_count": 11,
+      "output_row_count": 11,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 0,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "622a66cddfd4e991b521a826e490fa52480a8776dc0e559e593f5a08b241a2c4",
+      "timestamp": "2026-09-19T16:19:04.682562",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\context_train.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\context_train.csv",
+      "input_row_count": 4320,
+      "output_row_count": 4320,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 4303,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "7de98bf036a898941be6ea577f3ba88f663d7dcd61cf112a682b16c6eb28d2a6",
+      "timestamp": "2026-09-19T16:19:04.707261",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\context_validation.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\context_validation.csv",
+      "input_row_count": 1152,
+      "output_row_count": 1152,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 1109,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "95eb0bcfc4c72ea68aca13755e018b7ee7e44da774e141209bcc6cc48b22cc92",
+      "timestamp": "2026-09-19T16:19:04.713272",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\traffic_train.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\traffic_train.csv",
+      "input_row_count": 1883520,
+      "output_row_count": 1883520,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 0,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "7a3db21b2267e4ae66b09e8de0f90fd4504fade9298d345d35836670ea49a830",
+      "timestamp": "2026-09-19T16:19:15.536542",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\traffic_validation.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\traffic_validation.csv",
+      "input_row_count": 502272,
+      "output_row_count": 502272,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 0,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "cd0598c05286efac2f253d74376826846cff4e6417e2b7f3b1fa8945ace9fcb0",
+      "timestamp": "2026-09-19T16:19:18.955503",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\forecast_targets_train.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\forecast_targets_train.csv",
+      "input_row_count": 366240,
+      "output_row_count": 366240,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 0,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "9cca546b4964046fc767bbda29fddb516ceb971a492afe0f960316df7da021ea",
+      "timestamp": "2026-09-19T16:19:21.825827",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    },
+    {
+      "input_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\Datasets\\forecast_targets_validation.csv",
+      "output_file": "c:\\Users\\Naveen Uppari\\OneDrive\\Desktop\\neurax3.O\\dataset\\validated\\forecast_targets_validation.csv",
+      "input_row_count": 481344,
+      "output_row_count": 481344,
+      "number_of_removed_records": 0,
+      "number_of_duplicates": 0,
+      "number_of_missing_values": 0,
+      "transformations_applied": [
+        "schema_validation",
+        "row_count_assertion",
+        "primary_key_uniqueness_check"
+      ],
+      "sha256": "d90ea7fcf08b7a728a26ffa74ebbf2f0344cfae1adb9673a8f180cf267c7c3db",
+      "timestamp": "2026-09-19T16:19:25.870293",
+      "pipeline_version": "2.0.0",
+      "status": "PASSED"
+    }
+  ]
+}

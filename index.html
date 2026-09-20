@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlowSight AI — Finished Application Presentation Dossier</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Mermaid.js for Rendering Vector Flowcharts -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({ 
+      startOnLoad: true, 
+      theme: 'neutral',
+      flowchart: { curve: 'linear', useMaxWidth: true, htmlLabels: true }
+    });
+  </script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #2563eb;
+      --primary-subtle: #eff6ff;
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --slate-600: #475569;
+      --slate-500: #64748b;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --slate-50: #f8fafc;
+      --accent-green: #059669;
+      --accent-green-bg: #ecfdf5;
+      --accent-amber: #d97706;
+      --accent-amber-bg: #fffbeb;
+      --accent-purple: #7c3aed;
+      --accent-purple-bg: #f5f3ff;
+      --accent-red: #dc2626;
+      --accent-red-bg: #fef2f2;
+      --border-color: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--slate-100);
+      color: var(--slate-800);
+      line-height: 1.55;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Floating Action Toolbar */
+    .action-toolbar {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(8px);
+      padding: 6px 14px;
+      border-radius: 30px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      align-items: center;
+    }
+
+    .toolbar-title {
+      color: #94a3b8;
+      font-size: 11.5px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-print {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn-print:hover {
+      background: linear-gradient(135deg, #1d4ed8, #1e40af);
+      transform: translateY(-1px);
+    }
+
+    /* Document Canvas */
+    .document-canvas {
+      max-width: 1000px;
+      margin: 30px auto;
+      background: #ffffff;
+      padding: 45px 55px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      border: 1px solid var(--border-color);
+    }
+
+    /* Cover / Header Section */
+    .doc-header {
+      border-bottom: 2px solid var(--slate-200);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+    }
+
+    .badge-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 16px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .badge-primary { background: var(--primary-subtle); color: var(--primary); border: 1px solid #bfdbfe; }
+    .badge-purple { background: var(--accent-purple-bg); color: var(--accent-purple); border: 1px solid #ddd6fe; }
+    .badge-green { background: var(--accent-green-bg); color: var(--accent-green); border: 1px solid #a7f3d0; }
+    .badge-amber { background: var(--accent-amber-bg); color: var(--accent-amber); border: 1px solid #fde68a; }
+
+    .doc-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--slate-900);
+      letter-spacing: -0.6px;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .doc-subtitle {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--primary-light);
+      margin-bottom: 14px;
+    }
+
+    .doc-meta-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      background: var(--slate-50);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .doc-meta-table td {
+      padding: 8px 14px;
+      font-size: 12.5px;
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    .doc-meta-table td.label {
+      width: 25%;
+      font-weight: 600;
+      color: var(--slate-600);
+      background: #f8fafc;
+      border-right: 1px solid var(--slate-200);
+    }
+
+    .doc-meta-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Headings */
+    h1.section-heading {
+      font-family: 'Outfit', sans-serif;
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--slate-900);
+      margin-top: 28px;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2.subsection-heading {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--slate-800);
+      margin-top: 18px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    p {
+      margin-bottom: 10px;
+      color: var(--slate-700);
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 12px;
+      color: var(--slate-700);
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    li strong {
+      color: var(--slate-900);
+    }
+
+    /* Callout Boxes */
+    .callout {
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin: 12px 0;
+      border-left: 4px solid;
+      font-size: 13px;
+    }
+
+    .callout-important {
+      background: var(--accent-amber-bg);
+      border-left-color: var(--accent-amber);
+      color: #92400e;
+    }
+
+    .callout-info {
+      background: var(--primary-subtle);
+      border-left-color: var(--primary);
+      color: #1e40af;
+    }
+
+    .callout-danger {
+      background: var(--accent-red-bg);
+      border-left-color: var(--accent-red);
+      color: #991b1b;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      font-size: 12.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Diagram Card Containers - Tight & No Page Gap Overheads */
+    .diagram-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 10px;
+      margin: 10px 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    .diagram-card-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--slate-500);
+      margin-bottom: 8px;
+      border-bottom: 1px dashed var(--slate-200);
+      padding-bottom: 5px;
+    }
+
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+    }
+
+    /* Data & Analysis Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 12.5px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .data-table th {
+      background: var(--slate-800);
+      color: #ffffff;
+      text-align: left;
+      padding: 8px 12px;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.3px;
+    }
+
+    .data-table td {
+      padding: 7px 12px;
+      border-bottom: 1px solid var(--slate-200);
+      color: var(--slate-700);
+      vertical-align: top;
+    }
+
+    .data-table tr:nth-child(even) {
+      background: var(--slate-50);
+    }
+
+    .data-table strong {
+      color: var(--slate-900);
+    }
+
+    /* Grid Layouts */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    .feature-card {
+      background: var(--slate-50);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 12px 14px;
+    }
+
+    .feature-card h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--slate-900);
+      margin-bottom: 4px;
+    }
+
+    .feature-card p {
+      font-size: 12px;
+      margin-bottom: 0;
+    }
+
+    /* Footer */
+    .doc-footer {
+      margin-top: 36px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--slate-500);
+      font-size: 12px;
+    }
+
+    /* ===================================================
+       NO-GAP PRINT-TO-PDF STYLESHEET
+       Eliminates blank space before/after diagrams
+       =================================================== */
+    @page {
+      size: A4 portrait;
+      margin: 10mm 12mm 12mm 12mm;
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-size: 10.5pt !important;
+        line-height: 1.4 !important;
+      }
+
+      .action-toolbar {
+        display: none !important;
+      }
+
+      .document-canvas {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+
+      h1.section-heading {
+        page-break-before: auto !important;
+        break-before: auto !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+        font-size: 15pt !important;
+        margin-top: 14pt !important;
+        margin-bottom: 8pt !important;
+        border-bottom: 1.5pt solid #1e3a8a !important;
+      }
+
+      h2.subsection-heading {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+        font-size: 12pt !important;
+        margin-top: 11pt !important;
+        margin-bottom: 6pt !important;
+      }
+
+      .diagram-card {
+        padding: 6pt 6pt !important;
+        margin: 6pt 0 !important;
+        border: 1pt solid #cbd5e1 !important;
+        page-break-inside: auto !important;
+        break-inside: auto !important;
+      }
+
+      .diagram-card-title {
+        margin-bottom: 4pt !important;
+        padding-bottom: 3pt !important;
+        font-size: 8.5pt !important;
+      }
+
+      .mermaid svg {
+        max-height: 230pt !important;
+        width: auto !important;
+      }
+
+      .data-table, .callout, .two-col-grid, .feature-card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-top: 5pt !important;
+        margin-bottom: 5pt !important;
+      }
+
+      .doc-header {
+        border-bottom: 1.5pt solid #0f172a !important;
+        padding-bottom: 10pt !important;
+        margin-bottom: 12pt !important;
+      }
+
+      .doc-title {
+        font-size: 19pt !important;
+      }
+
+      .doc-subtitle {
+        font-size: 11pt !important;
+        margin-bottom: 8pt !important;
+      }
+
+      .badge {
+        border: 0.8pt solid #cbd5e1 !important;
+        font-size: 8pt !important;
+        padding: 2pt 5pt !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .data-table th {
+        background: #1e293b !important;
+        color: #ffffff !important;
+        padding: 5pt 8pt !important;
+        font-size: 8.5pt !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .data-table td {
+        padding: 4pt 8pt !important;
+        font-size: 8.5pt !important;
+      }
+
+      .callout {
+        padding: 5pt 8pt !important;
+        font-size: 8.5pt !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Print Toolbar -->
+  <div class="action-toolbar">
+    <span class="toolbar-title">DOCUMENT EXPORT</span>
+    <button class="btn-print" onclick="window.print()">
+      <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/>
+      </svg>
+      Save as PDF / Print
+    </button>
+  </div>
+
+  <main class="document-canvas">
+    
+    <!-- COVER & HEADER -->
+    <header class="doc-header">
+      <div class="badge-group">
+        <span class="badge badge-primary">Finished Application Presentation</span>
+        <span class="badge badge-purple">FlowSight AI PRD Source of Truth</span>
+        <span class="badge badge-green">Decision Support & Simulation Only</span>
+        <span class="badge badge-amber">Advisory Scope</span>
+      </div>
+
+      <h1 class="doc-title">FlowSight AI</h1>
+      <div class="doc-subtitle">Urban Traffic Flow & Incident Intelligence Platform</div>
+      <p style="color: var(--slate-600); font-size: 13px; max-width: 850px;">
+        An AI-powered urban traffic decision and intelligence platform providing real-time situational awareness, 15–60 minute forecasting, tactical diversion simulation, and long-term infrastructure what-if analysis.
+      </p>
+
+      <table class="doc-meta-table">
+        <tr>
+          <td class="label">Project Name</td>
+          <td><strong>FlowSight AI</strong> — Finished Application Dossier</td>
+        </tr>
+        <tr>
+          <td class="label">Problem Statement</td>
+          <td><strong>Urban Traffic Flow & Incident Intelligence</strong></td>
+        </tr>
+        <tr>
+          <td class="label">System Classification</td>
+          <td><strong>Software-Only Decision Support & Simulation Platform</strong> (No physical signal control, municipal camera taps, GPS tracking, roadside sensors, or physical construction)</td>
+        </tr>
+        <tr>
+          <td class="label">Data Foundation</td>
+          <td><strong>Organizer-Provided Datasets:</strong> Traffic observations, road network graph, nodes, signal plans, turn restrictions, incident logs, roadworks, and OD demand profiles.</td>
+        </tr>
+        <tr>
+          <td class="label">Core Intelligence Loop</td>
+          <td><strong>Detect &rarr; Understand &rarr; Predict &rarr; Simulate &rarr; Compare &rarr; Explain</strong></td>
+        </tr>
+      </table>
+    </header>
+
+    <!-- SECTION 1: PROBLEM UNDERSTANDING -->
+    <section>
+      <h1 class="section-heading">
+        <span>1. Problem Understanding</span>
+      </h1>
+
+      <h2 class="subsection-heading">The Urban Traffic Challenge</h2>
+      <p>
+        In modern metropolitan areas, urban road networks operate under continuous strain. Traffic conditions do not remain static; they evolve rapidly and unpredictably throughout the day. A corridor moving smoothly at one moment can plunge into gridlock minutes later due to:
+      </p>
+
+      <div class="two-col-grid">
+        <div class="feature-card">
+          <h4>⚡ Asymmetric Peak Demand</h4>
+          <p>Sudden morning and evening surges where vehicle volume exceeds the physical capacity of major arterial corridors and flyovers.</p>
+        </div>
+        <div class="feature-card">
+          <h4>🚦 Signal Platoon Delays</h4>
+          <p>Periodic traffic signal cycles that repeatedly compress vehicles into dense platoons, creating recurring friction points at intersections.</p>
+        </div>
+        <div class="feature-card">
+          <h4>🚧 Incidents & Roadworks</h4>
+          <p>Collisions, vehicle breakdowns, and maintenance closures that suddenly throttle capacity, launching backward-propagating shockwaves.</p>
+        </div>
+        <div class="feature-card">
+          <h4>🔄 Cascading Queue Spillback</h4>
+          <p>Queues exceeding link storage back up into upstream intersection boxes, physically blocking lateral traffic and locking entire grids.</p>
+        </div>
+      </div>
+
+      <h2 class="subsection-heading">Why Simply Knowing a Road is Congested is Not Enough</h2>
+      <p>
+        Conventional traffic monitoring tools only report that a road is currently "red" or delayed. For traffic managers and urban planners, this notification arrives too late and provides no actionable path forward. Decision-makers need an intelligence system that answers five fundamental questions:
+      </p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width: 25%;">Core Question</th>
+            <th style="width: 35%;">Operational Meaning</th>
+            <th style="width: 40%;">FlowSight AI Capability</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. What is happening?</strong></td>
+            <td>Continuous Situational Awareness</td>
+            <td>Estimates true traffic conditions, velocities, and service levels across all connected road segments.</td>
+          </tr>
+          <tr>
+            <td><strong>2. Why is it happening?</strong></td>
+            <td>Causal Attribution</td>
+            <td>Determines whether slowdowns stem from peak volume, collisions, roadworks, or upstream spillback.</td>
+          </tr>
+          <tr>
+            <td><strong>3. What will happen next?</strong></td>
+            <td>Multi-Horizon Forecasting</td>
+            <td>Predicts how congestion and queues will spread over the next 15, 30, 45, and 60 minutes.</td>
+          </tr>
+          <tr>
+            <td><strong>4. What action to simulate?</strong></td>
+            <td>Tactical Diversion Evaluation</td>
+            <td>Simulates rerouting traffic onto alternate corridors to relieve chokepoints without overloading secondary roads.</td>
+          </tr>
+          <tr>
+            <td><strong>5. How to permanently improve?</strong></td>
+            <td>Strategic Infrastructure Planning</td>
+            <td>Identifies recurring structural bottlenecks and simulates candidate geometry changes (lanes, turn pockets).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-important">
+        <div class="callout-title">System Purpose & Operating Boundaries</div>
+        <strong>FlowSight AI</strong> is built strictly on organizer-provided traffic observations and road-network datasets. It is a <strong>decision-support and simulation platform</strong>. It does <strong>NOT</strong> control traffic signals, access live municipal CCTV feeds, track individual GPS devices, tap roadside sensors, access municipal intranets, or authorize real-world construction.
+      </div>
+    </section>
+
+    <!-- SECTION 2: HOW THE APPLICATION WORKS -->
+    <section>
+      <h1 class="section-heading">
+        <span>2. How the Application Works</span>
+      </h1>
+
+      <p>
+        When a judge, traffic operator, or planner opens FlowSight AI, the platform provides a complete, user-facing operational experience designed to turn raw data into clear situational understanding and simulated action.
+      </p>
+
+      <h2 class="subsection-heading">2.1 Traffic Command Center</h2>
+      <p>
+        Upon launching the application, the user is presented with the unified **Traffic Command Center**:
+      </p>
+      <ul>
+        <li><strong>Interactive Network Map:</strong> Complete topological road network rendering directed segments color-coded by real-time health.</li>
+        <li><strong>Current Traffic Conditions:</strong> Instantaneous velocity, estimated travel times, and road service levels across every arterial link.</li>
+        <li><strong>Configurable Congestion Regimes:</strong> Segments categorized into <em>Free-Flow</em>, <em>Building</em>, <em>Congested</em>, <em>Severe</em>, or <em>Unknown / Low Confidence</em>.</li>
+        <li><strong>Live Alerts & Data Quality:</strong> Prioritized alert panel showing active anomalies, observation freshness, and confidence scores.</li>
+        <li><strong>Replay Time Controller:</strong> Slider allowing users to step through live streaming batches or replay historical traffic days.</li>
+      </ul>
+
+      <h2 class="subsection-heading">2.2 Traffic Intelligence & Evidence Dossiers</h2>
+      <p>
+        FlowSight AI compares current segment speeds against time-of-day and day-of-week historical baselines to decouple expected peak congestion from abnormal disruptions. When an alert is raised, clicking the segment opens an **Evidence Dossier** detailing the speed drop magnitude, expected historical speed, duration, and neighboring road status.
+      </p>
+
+      <h2 class="subsection-heading">2.3 Multi-Horizon Traffic Forecasting (15–60 Minutes)</h2>
+      <p>
+        An interactive **Forecast Slider** allows users to view anticipated network states across four planning horizons:
+      </p>
+      <ul>
+        <li><strong>15 Minutes:</strong> Identifies immediate shockwave inception and approaching platoon bottlenecks.</li>
+        <li><strong>30 Minutes:</strong> Highlights the critical operational window to evaluate diversions before upstream junctions lock up.</li>
+        <li><strong>45 to 60 Minutes:</strong> Reveals whether a corridor will naturally dissipate or trigger cascading gridlock across the network.</li>
+      </ul>
+
+      <h2 class="subsection-heading">2.4 Incident Intelligence & Attribution</h2>
+      <p>
+        When abnormal traffic behavior occurs, the system correlates the kinematic drop against organizer incident and roadwork logs. If corroborated by a roadwork permit, it is marked as a *Confirmed Roadwork Bottleneck*. If uncorroborated by available dataset records, the system strictly tags it as an <strong>"Incident-Like Anomaly"</strong>—never inventing an accident cause without verified data.
+      </p>
+
+      <h2 class="subsection-heading">2.5 Spillback & Network Impact</h2>
+      <p>
+        As vehicle queues approach segment physical capacity, the application traces connected upstream feeder links. It flags intersections where queues threaten to block lateral cross-street traffic, alerting operators of impending gridlock cascades.
+      </p>
+
+      <h2 class="subsection-heading">2.6 Diversion Simulation (Response Sandbox)</h2>
+      <div class="diagram-card">
+        <div class="diagram-card-title">User Diversion Simulation Experience</div>
+        <div class="mermaid">
+flowchart LR
+    classDef step fill:#f8fafc,stroke:#2563eb,stroke-width:2px,color:#0f172a,font-weight:bold;
+    classDef pass fill:#ecfdf5,stroke:#10b981,stroke-width:2px,color:#064e3b,font-weight:bold;
+    classDef fail fill:#fee2e2,stroke:#ef4444,stroke-width:2px,color:#7f1d1d,font-weight:bold;
+
+    U1["1. Select Congested Link"]:::step
+    --> U2["2. System Discovers Alternate Paths"]:::step
+    --> U3["3. User Tests Diversion % (10–30%)"]:::step
+    --> U4["4. Simulates BPR Flow Redistribution"]:::step
+    --> U5{"Bypass Capacity OK?"}
+
+    U5 -->|Yes| U6["Publish Advisory Dossier<br/>(Net Delay Savings)"]:::pass
+    U5 -->|No| U7["Warning: Risk of Secondary Grid Collapse"]:::fail
+        </div>
+      </div>
+      <p>
+        The simulator tests whether rerouting approaching traffic relieves the primary corridor without overloading secondary roads. The output is strictly an **advisory simulation** for human review, never an automated real-world command.
+      </p>
+
+      <h2 class="subsection-heading">2.7 Bottleneck Intelligence & Infrastructure What-If Simulation</h2>
+      <p>
+        For long-term planning, FlowSight AI mines multi-week observation histories to isolate recurring structural choke points, evaluating frequency, duration, and delay. 
+      </p>
+      <p>
+        In the **Infrastructure Studio**, planners test candidate modifications (adding lanes, dedicated turn pockets, lane allocation shifts, turn restrictions, or new connector links). The application renders side-by-side **Before vs. After** metrics (total vehicle hours traveled, corridor delay, queue dissipation times) to guide capital investment.
+      </p>
+
+      <h2 class="subsection-heading">2.8 Explainability, Confidence & The Operational Loop</h2>
+      <p>
+        Every alert, forecast, and advisory is paired with transparent evidence, data freshness scores, and documented assumptions. The system executes a complete operational intelligence cycle:
+      </p>
+
+      <div class="diagram-card">
+        <div class="diagram-card-title">FlowSight AI Conceptual Operational Loop</div>
+        <div class="mermaid">
+flowchart LR
+    classDef loopNode fill:#f8fafc,stroke:#2563eb,stroke-width:2px,color:#0f172a,font-weight:bold;
+
+    L1["1. DETECT<br/><i>Speed drops</i>"]:::loopNode
+    --> L2["2. UNDERSTAND<br/><i>Causal context</i>"]:::loopNode
+    --> L3["3. PREDICT<br/><i>15–60m state</i>"]:::loopNode
+    --> L4["4. SIMULATE<br/><i>Diversions & what-if</i>"]:::loopNode
+    --> L5["5. COMPARE<br/><i>Baseline vs delta</i>"]:::loopNode
+    --> L6["6. EXPLAIN<br/><i>Evidence & audit</i>"]:::loopNode
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: APPLICATION ARCHITECTURE -->
+    <section>
+      <h1 class="section-heading">
+        <span>3. Application Architecture</span>
+      </h1>
+
+      <p>
+        This architecture represents the finished FlowSight AI application, showing how its analytical engines, data stores, automation backplane, and user interface interact.
+      </p>
+
+      <div class="diagram-card">
+        <div class="diagram-card-title">FlowSight AI Application Architecture Diagram</div>
+        <div class="mermaid">
+flowchart TD
+    classDef dataLayer fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0f172a,font-weight:bold;
+    classDef intelLayer fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#0f172a,font-weight:bold;
+    classDef simLayer fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#0f172a,font-weight:bold;
+    classDef storeLayer fill:#fce7f3,stroke:#db2777,stroke-width:2px,color:#701a75,font-weight:bold;
+    classDef autoLayer fill:#ffedd5,stroke:#ea580c,stroke-width:2px,color:#7c2d12,font-weight:bold;
+    classDef uiLayer fill:#cffafe,stroke:#0891b2,stroke-width:2px,color:#0c4a6e,font-weight:bold;
+
+    subgraph DATA_LAYER ["1. Organizer Data Layer"]
+        direction TB
+        DS_Obs["Traffic Observations & Target Indicators"]:::dataLayer
+        DS_Net["Road Network Graph, Nodes & Signal Plans"]:::dataLayer
+        DS_Ctx["Incident Logs, Roadworks & OD Demand Profiles"]:::dataLayer
+    end
+
+    subgraph INTEL_LAYER ["2. FlowSight AI Intelligence Layer"]
+        direction TB
+        MOD_State["Traffic State & Network Condition Understanding"]:::intelLayer
+        MOD_Anom["Congestion & Anomaly Intelligence"]:::intelLayer
+        MOD_Inc["Incident Intelligence & Causal Attribution"]:::intelLayer
+        MOD_Fore["15–60 Minute Multi-Horizon Forecasting"]:::intelLayer
+        MOD_Spill["Spillback & Network Propagation Analysis"]:::intelLayer
+        
+        MOD_State --> MOD_Anom --> MOD_Inc --> MOD_Fore --> MOD_Spill
+    end
+
+    subgraph SIM_LAYER ["3. Simulation & Decision Support Layer"]
+        direction TB
+        DEC_Div["Tactical Diversion Simulation & Capacity Check"]:::simLayer
+        DEC_Bot["Recurring Bottleneck Mining & Profiling"]:::simLayer
+        DEC_Inf["Infrastructure What-If Scenario Evaluation"]:::simLayer
+        DEC_Adv["Evidence-Based Advisory & Rationale Formulator"]:::simLayer
+        
+        DEC_Div --> DEC_Adv
+        DEC_Bot --> DEC_Adv
+        DEC_Inf --> DEC_Adv
+    end
+
+    subgraph BACKBONE ["4. Persistence & Automation Backbone"]
+        direction LR
+        DB[("Supabase Database<br/><b>Central State & Knowledge Store</b><br/>• Road States & Graph Topology<br/>• Predictions, Anomalies & Incident Cards<br/>• Simulation Runs & Evidence Dossiers")]:::storeLayer
+
+        N8N{{"n8n Automation Engine<br/><b>Workflow & Alert Orchestrator</b><br/>• Automated Pipeline Scheduling<br/>• Anomaly Threshold Triggers<br/>• Alert Notifications & Digest Sync"}}:::autoLayer
+
+        DB <-->|"State Sync & Event Hooks"| N8N
+    end
+
+    subgraph FRONTEND ["5. FlowSight AI Command Center (User Interface)"]
+        UI["Traffic Intelligence Command Center Dashboard<br/><i>Interactive Network Heatmap • 15–60m Forecast Slider • Incident Dossiers<br/>• Diversion Response Sandbox • Infrastructure What-If Planning Studio</i>"]:::uiLayer
+    end
+
+    DATA_LAYER ==>|"Ingestion & Network Mapping"| INTEL_LAYER
+    INTEL_LAYER ==>|"Critical Bottlenecks & Network States"| SIM_LAYER
+    
+    INTEL_LAYER -->|"States, Forecasts & Anomalies"| DB
+    SIM_LAYER ==>|"Simulated Advisories & Scenario Results"| DB
+
+    DB ==>|"Real-Time Data Feed"| UI
+    UI -.->|"User Triggers Simulation"| SIM_LAYER
+        </div>
+      </div>
+
+      <h2 class="subsection-heading">Application Component Roles in Simple Terms</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width: 25%;">Application Component</th>
+            <th style="width: 75%;">Simple Functional Role & User Experience Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Data Layer</strong></td>
+            <td>Ingests and normalizes organizer traffic observations, road network graph, signal plans, and incident logs, attaching them to the network digital twin.</td>
+          </tr>
+          <tr>
+            <td><strong>Intelligence Layer</strong></td>
+            <td>Transforms observations into understandable traffic conditions (Free-flow, Building, Congested, Severe), flags anomalies, and evaluates incident likelihood.</td>
+          </tr>
+          <tr>
+            <td><strong>Forecasting Layer</strong></td>
+            <td>Provides rolling 15, 30, 45, and 60-minute future traffic states, giving operators time to intervene before gridlock occurs.</td>
+          </tr>
+          <tr>
+            <td><strong>Simulation Layer</strong></td>
+            <td>Risk-free sandbox testing diversion rerouting and hypothetical infrastructure changes (lanes, turn pockets) under identical demand.</td>
+          </tr>
+          <tr>
+            <td><strong>Decision Support Layer</strong></td>
+            <td>Synthesizes outputs into clear, evidence-based advisories detailing supporting indicators, expected savings, and confidence scores.</td>
+          </tr>
+          <tr>
+            <td><strong>Application Layer (UI)</strong></td>
+            <td>The primary Command Center interface where users inspect the live network, adjust forecast sliders, test diversions, and explore scenarios.</td>
+          </tr>
+          <tr>
+            <td><strong>Automation Layer (n8n)</strong></td>
+            <td>The workflow orchestrator that schedules pipeline updates, monitors threshold triggers, and dispatches alerts. <em>(Not the AI model itself)</em></td>
+          </tr>
+          <tr>
+            <td><strong>Database Layer (Supabase)</strong></td>
+            <td>The persistent relational state store managing network topology, observations, forecasts, incident cards, simulation runs, and advisories.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="doc-footer">
+      <div>
+        <strong>FlowSight AI</strong> &bull; Urban Traffic Flow & Incident Intelligence Platform
+      </div>
+      <div>
+        Finished Application Presentation Dossier &bull; Print-Optimized
+      </div>
+    </footer>
+
+  </main>
+
+</body>
+</html>

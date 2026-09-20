@@ -1,0 +1,102 @@
+{
+  "name": "FlowSight AI — 04 Scheduled Daily Mobility & Bottleneck Report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 24
+            }
+          ]
+        }
+      },
+      "id": "node-daily-cron",
+      "name": "Daily 24h Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [100, 200]
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:8000/api/bottlenecks",
+        "method": "GET"
+      },
+      "id": "node-fetch-bottlenecks",
+      "name": "Fetch Recurring Bottlenecks",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [320, 200]
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:8000/api/models",
+        "method": "GET"
+      },
+      "id": "node-fetch-model-health",
+      "name": "Fetch Model Quality Metrics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [540, 200]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "report_type",
+              "value": "DAILY_MOBILITY_EXECUTIVE_SUMMARY"
+            },
+            {
+              "name": "model_status",
+              "value": "={{ $json.quality_gate }}"
+            }
+          ]
+        }
+      },
+      "id": "node-compile-report",
+      "name": "Compile Executive Report",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [760, 200]
+    }
+  ],
+  "connections": {
+    "Daily 24h Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch Recurring Bottlenecks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Recurring Bottlenecks": {
+      "main": [
+        [
+          {
+            "node": "Fetch Model Quality Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Model Quality Metrics": {
+      "main": [
+        [
+          {
+            "node": "Compile Executive Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {}
+}

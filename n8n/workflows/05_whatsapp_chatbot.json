@@ -1,0 +1,178 @@
+{
+  "name": "FlowSight AI — 05 WhatsApp Omni-Channel AI Chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "ALL",
+        "path": "whatsapp-webhook",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "node-webhook-receiver",
+      "name": "Webhook (WhatsApp Universal Receiver)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.query ? $json.query['hub.mode'] : '' }}",
+              "operation": "equal",
+              "value2": "subscribe"
+            }
+          ]
+        }
+      },
+      "id": "node-is-verification",
+      "name": "Is Meta Verification (GET)?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [320, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.query ? ($json.query['hub.challenge'] || $json.query['hub_challenge'] || $json.query.challenge || '123456') : '123456' }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "node-respond-challenge",
+      "name": "Respond to Meta Challenge (200 OK)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [540, 100]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "EVENT_RECEIVED",
+        "options": {}
+      },
+      "id": "node-ack-post",
+      "name": "Acknowledge Meta POST (200 OK)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [540, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse incoming Meta WhatsApp Cloud payload safely\nconst body = $json.body || $json;\nlet userMessage = \"help\";\nlet senderPhone = \"917993713025\";\n\nif (body.entry && body.entry[0]?.changes && body.entry[0].changes[0]?.value) {\n  const val = body.entry[0].changes[0].value;\n  if (val.messages && val.messages[0]) {\n    const msg = val.messages[0];\n    senderPhone = msg.from || \"917993713025\";\n    if (msg.text && msg.text.body) {\n      userMessage = msg.text.body;\n    } else if (msg.type === \"interactive\" && msg.interactive) {\n      userMessage = msg.interactive.button_reply?.title || msg.interactive.list_reply?.title || \"help\";\n    }\n  }\n} else if (body.messages && body.messages[0]) {\n  const msg = body.messages[0];\n  senderPhone = msg.from || \"917993713025\";\n  userMessage = msg.text?.body || \"help\";\n} else if (body.text && body.text.body) {\n  userMessage = body.text.body;\n  senderPhone = body.from || \"917993713025\";\n} else if (body.body && body.from) {\n  userMessage = body.body;\n  senderPhone = body.from;\n} else if (body.message) {\n  userMessage = body.message;\n  senderPhone = body.phone || body.sender || \"917993713025\";\n}\n\nreturn [{\n  json: {\n    senderPhone: senderPhone,\n    userMessage: userMessage,\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "node-extract-message",
+      "name": "Extract Message & Sender",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [760, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:8000/api/chat",
+        "method": "POST",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "={{ $json.userMessage }}"
+            },
+            {
+              "name": "sender",
+              "value": "={{ $json.senderPhone }}"
+            },
+            {
+              "name": "channel",
+              "value": "whatsapp"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-query-flowsight-brain",
+      "name": "Query FlowSight AI Brain",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [980, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "recipientPhoneNumber": "={{ $('Extract Message & Sender').first().json.senderPhone }}",
+        "messageType": "text",
+        "textBody": "={{ $json.reply }}",
+        "additionalFields": {
+          "previewUrl": true
+        }
+      },
+      "id": "node-whatsapp-cloud",
+      "name": "WhatsApp Cloud",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [1200, 300]
+    }
+  ],
+  "connections": {
+    "Webhook (WhatsApp Universal Receiver)": {
+      "main": [
+        [
+          {
+            "node": "Is Meta Verification (GET)?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Meta Verification (GET)?": {
+      "main": [
+        [
+          {
+            "node": "Respond to Meta Challenge (200 OK)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Acknowledge Meta POST (200 OK)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Extract Message & Sender",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Message & Sender": {
+      "main": [
+        [
+          {
+            "node": "Query FlowSight AI Brain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query FlowSight AI Brain": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {}
+}

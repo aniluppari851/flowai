@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlowSight AI — Urban Traffic Intelligence & Decision-Support Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #090d16;
+      --bg-card: rgba(18, 26, 44, 0.75);
+      --bg-card-hover: rgba(28, 39, 65, 0.9);
+      --border-color: rgba(99, 102, 241, 0.18);
+      --border-glow: rgba(59, 130, 246, 0.45);
+      --primary: #3b82f6;
+      --primary-light: #60a5fa;
+      --accent: #8b5cf6;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 65%, rgba(139, 92, 246, 0.10) 0%, transparent 45%),
+        radial-gradient(circle at 50% 90%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── HEADER & HERO ── */
+    header {
+      padding: 56px 0 36px;
+      text-align: center;
+      position: relative;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+    }
+
+    .badge-pill .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, #ffffff 30%, #93c5fd 70%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 820px;
+      margin: 0 auto 32px;
+      font-weight: 400;
+    }
+
+    /* ── CORE THESIS CALLOUT ── */
+    .thesis-banner {
+      background: linear-gradient(135deg, rgba(30, 41, 67, 0.8), rgba(20, 28, 48, 0.9));
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 20px;
+      padding: 28px 36px;
+      margin: 20px auto 60px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .thesis-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--accent));
+    }
+
+    .thesis-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.5;
+    }
+
+    .thesis-highlight {
+      color: var(--primary-light);
+    }
+
+    .thesis-sub {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* ── SECTION STYLES ── */
+    section {
+      margin-bottom: 72px;
+    }
+
+    .section-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-bottom: 32px;
+      max-width: 800px;
+    }
+
+    /* ── 3-QUESTIONS GRID ── */
+    .questions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .q-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 32px 28px;
+      backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .q-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-glow);
+      background: var(--bg-card-hover);
+      box-shadow: 0 20px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .q-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      width: fit-content;
+    }
+
+    .q-card.q1 .q-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+    .q-card.q2 .q-badge { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .q-card.q3 .q-badge { background: rgba(139, 92, 246, 0.2); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.4); }
+
+    .q-heading {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: #ffffff;
+    }
+
+    .q-content {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    .q-evidence-box {
+      background: rgba(10, 15, 29, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+    }
+
+    .q-evidence-box .item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .q-evidence-box .item:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ── DIAGRAM CARDS & SYSTEM ARCHITECTURE ── */
+    .diagram-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 36px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .svg-diagram {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+    }
+
+    /* ── COMPARISON TABLE ── */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .comp-card {
+      border-radius: 20px;
+      padding: 32px;
+      position: relative;
+    }
+
+    .comp-card.gmaps {
+      background: rgba(23, 29, 46, 0.5);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .comp-card.flowsight {
+      background: linear-gradient(145deg, rgba(30, 42, 70, 0.85), rgba(20, 28, 52, 0.95));
+      border: 2px solid rgba(59, 130, 246, 0.6);
+      box-shadow: 0 12px 35px rgba(59, 130, 246, 0.2);
+    }
+
+    .comp-tag {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .gmaps .comp-tag { color: var(--text-dim); }
+    .flowsight .comp-tag { color: #38bdf8; }
+
+    .comp-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .comp-core-question {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      border-left: 4px solid var(--text-dim);
+    }
+
+    .flowsight .comp-core-question {
+      border-left-color: var(--primary-light);
+      color: #ffffff;
+      background: rgba(59, 130, 246, 0.12);
+    }
+
+    .comp-features-list {
+      list-style: none;
+    }
+
+    .comp-features-list li {
+      margin-bottom: 14px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      line-height: 1.5;
+    }
+
+    .flowsight .comp-features-list li {
+      color: #e2e8f0;
+    }
+
+    .check-icon {
+      color: var(--emerald);
+      font-weight: 800;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .bullet-icon {
+      color: var(--text-dim);
+      flex-shrink: 0;
+    }
+
+    /* ── HORIZONS INTERACTIVE STRIP ── */
+    .horizons-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .horizon-box {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .horizon-box:hover {
+      transform: scale(1.03);
+      border-color: var(--primary);
+    }
+
+    .horizon-time {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #60a5fa;
+      margin-bottom: 6px;
+    }
+
+    .horizon-status {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .horizon-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+      .questions-grid, .comparison-grid, .horizons-strip {
+        grid-template-columns: 1fr;
+      }
+      h1 { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- ── HEADER ── -->
+    <header>
+      <div class="badge-pill">
+        <span class="pulse-dot"></span>
+        AI Urban Traffic Decision-Support Architecture
+      </div>
+      <h1>FlowSight AI Intelligence Platform</h1>
+      <p class="hero-subtitle">
+        Bridging the gap between simple navigation routing and predictive, explainable traffic intelligence.
+      </p>
+
+      <!-- ── CORE THESIS CALLOUT ── -->
+      <div class="thesis-banner">
+        <div class="thesis-text">
+          "Google Maps can tell you <span class="thesis-highlight">how to get there</span>.<br/>
+          FlowSight tries to tell you <span class="thesis-highlight">what is happening</span> on the way, <span class="thesis-highlight">why it is happening</span>, <span class="thesis-highlight">what is likely to happen next</span>, and how the surrounding network affects your journey."
+        </div>
+        <p class="thesis-sub">
+          Routing is our foundation — our innovation is the predictive and explainable traffic intelligence built around the route.
+        </p>
+      </div>
+    </header>
+
+    <!-- ── SECTION 1: THE CORE 3 QUESTIONS ── -->
+    <section>
+      <h2 class="section-title">
+        <span>⚡ The 3 Core Questions FlowSight Answers</span>
+      </h2>
+      <p class="section-desc">
+        Once a route is chosen, FlowSight deploys trained machine-learning models and live sensor loop telemetry to provide complete situational awareness.
+      </p>
+
+      <div class="questions-grid">
+        <!-- Card 1 -->
+        <div class="q-card q1">
+          <span class="q-badge">Question 1</span>
+          <h3 class="q-heading">What is happening?</h3>
+          <p class="q-content">
+            Real-time assessment of active congestion zones, structural bottlenecks, abnormal deceleration waves, road construction barricades, and weather-induced friction drops affecting the corridor.
+          </p>
+          <div class="q-evidence-box">
+            <div class="item">🔴 <b>Queue:</b> 142 vehicles backlog (850m)</div>
+            <div class="item">⚡ <b>Speed Deficit:</b> 18.2 vs 50 km/h baseline</div>
+            <div class="item">🚧 <b>Obstruction:</b> 1 of 3 lanes barricaded</div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="q-card q2">
+          <span class="q-badge">Question 2</span>
+          <h3 class="q-heading">Why is it happening?</h3>
+          <p class="q-content">
+            Instead of merely painting roads red, FlowSight extracts explainable evidence: historical flow imbalances, municipal work orders, signal saturation cycles, and upstream intersection spillover.
+          </p>
+          <div class="q-evidence-box">
+            <div class="item">🔍 <b>Evidence:</b> Flyover expansion joint repair</div>
+            <div class="item">📊 <b>Detector:</b> Loop #14 at 82.4% occupancy</div>
+            <div class="item">⏱️ <b>Signals:</b> 3 cycle wait per intersection</div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="q-card q3">
+          <span class="q-badge">Question 3</span>
+          <h3 class="q-heading">What will happen next?</h3>
+          <p class="q-content">
+            Multi-horizon GBDT machine learning models forecast conditions across 15, 30, 45, and 60-minute windows, anticipating queue propagation, peak waves, and recovery curves.
+          </p>
+          <div class="q-evidence-box">
+            <div class="item">📈 <b>+15m:</b> +3m delay (Congestion building)</div>
+            <div class="item">⚠️ <b>+30m:</b> +8m delay (Severe peak saturation)</div>
+            <div class="item">🔄 <b>+60m:</b> Off-peak discharge & recovery</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 2: ARCHITECTURE DIAGRAM ── -->
+    <section>
+      <h2 class="section-title">
+        <span>🗺️ FlowSight AI System Architecture & Data Flow</span>
+      </h2>
+      <p class="section-desc">
+        End-to-end intelligence pipeline from raw sensor telemetry to decision-support and copilot interaction.
+      </p>
+
+      <div class="diagram-container">
+        <svg class="svg-diagram" viewBox="0 0 1100 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background Grid lines -->
+          <line x1="100" y1="50" x2="100" y2="430" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4 4" />
+          <line x1="380" y1="50" x2="380" y2="430" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4 4" />
+          <line x1="680" y1="50" x2="680" y2="430" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4 4" />
+          <line x1="980" y1="50" x2="980" y2="430" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4 4" />
+
+          <!-- Block 1: Ingestion & Telemetry -->
+          <rect x="30" y="70" width="220" height="340" rx="16" fill="#131b2e" stroke="rgba(59,130,246,0.4)" stroke-width="2" />
+          <text x="140" y="105" fill="#60a5fa" font-size="14" font-weight="800" text-anchor="middle">1. TELEMETRY & DATA</text>
+          
+          <rect x="50" y="130" width="180" height="50" rx="8" fill="#1e293b" />
+          <text x="140" y="160" fill="#f8fafc" font-size="12" font-weight="600" text-anchor="middle">Loop Detectors & Volume</text>
+
+          <rect x="50" y="195" width="180" height="50" rx="8" fill="#1e293b" />
+          <text x="140" y="225" fill="#f8fafc" font-size="12" font-weight="600" text-anchor="middle">Road Network Graph</text>
+
+          <rect x="50" y="260" width="180" height="50" rx="8" fill="#1e293b" />
+          <text x="140" y="290" fill="#f8fafc" font-size="12" font-weight="600" text-anchor="middle">Event & Weather Feeds</text>
+
+          <rect x="50" y="325" width="180" height="50" rx="8" fill="#1e293b" />
+          <text x="140" y="355" fill="#f8fafc" font-size="12" font-weight="600" text-anchor="middle">Permits & Roadworks</text>
+
+          <!-- Connector Arrow 1 -> 2 -->
+          <path d="M250 240 L310 240" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrow)" />
+
+          <!-- Block 2: ML Engines -->
+          <rect x="310" y="70" width="240" height="340" rx="16" fill="#181838" stroke="rgba(139,92,246,0.4)" stroke-width="2" />
+          <text x="430" y="105" fill="#c084fc" font-size="14" font-weight="800" text-anchor="middle">2. AI & ML ENGINES</text>
+
+          <rect x="330" y="130" width="200" height="75" rx="8" fill="#2e1065" stroke="rgba(192,132,252,0.3)" />
+          <text x="430" y="160" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">Isolation Forest Model</text>
+          <text x="430" y="182" fill="#c084fc" font-size="10" text-anchor="middle">Abnormal Deceleration Detection</text>
+
+          <rect x="330" y="220" width="200" height="85" rx="8" fill="#2e1065" stroke="rgba(192,132,252,0.3)" />
+          <text x="430" y="250" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">4-Horizon GBDT Models</text>
+          <text x="430" y="272" fill="#c084fc" font-size="10" text-anchor="middle">+15m, +30m, +45m, +60m Projections</text>
+          <text x="430" y="290" fill="#a855f7" font-size="9" text-anchor="middle">Queue Growth & Spillback Probabilities</text>
+
+          <rect x="330" y="320" width="200" height="65" rx="8" fill="#2e1065" stroke="rgba(192,132,252,0.3)" />
+          <text x="430" y="348" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">Network Bottleneck Ranker</text>
+          <text x="430" y="368" fill="#c084fc" font-size="10" text-anchor="middle">Recurrence & Mean Delay Metrics</text>
+
+          <!-- Connector Arrow 2 -> 3 -->
+          <path d="M550 240 L610 240" stroke="#8b5cf6" stroke-width="3" marker-end="url(#arrow)" />
+
+          <!-- Block 3: Decision Intelligence Layer -->
+          <rect x="610" y="70" width="220" height="340" rx="16" fill="#0f2924" stroke="rgba(16,185,129,0.4)" stroke-width="2" />
+          <text x="720" y="105" fill="#34d399" font-size="14" font-weight="800" text-anchor="middle">3. DECISION LAYER</text>
+
+          <rect x="630" y="130" width="180" height="50" rx="8" fill="#064e3b" />
+          <text x="720" y="155" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">What? Why? What Next?</text>
+          <text x="720" y="170" fill="#6ee7b7" font-size="10" text-anchor="middle">Evidence Synthesis Engine</text>
+
+          <rect x="630" y="195" width="180" height="50" rx="8" fill="#064e3b" />
+          <text x="720" y="220" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">Multi-Modal Dispatch</text>
+          <text x="720" y="235" fill="#6ee7b7" font-size="10" text-anchor="middle">Drive, Metro Hub, Walking</text>
+
+          <rect x="630" y="260" width="180" height="50" rx="8" fill="#064e3b" />
+          <text x="720" y="285" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">Bypass Rerouting Logic</text>
+          <text x="720" y="300" fill="#6ee7b7" font-size="10" text-anchor="middle">Real-time Time-Savings Index</text>
+
+          <rect x="630" y="325" width="180" height="50" rx="8" fill="#064e3b" />
+          <text x="720" y="350" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">Live Incident Hazard Alerts</text>
+          <text x="720" y="365" fill="#6ee7b7" font-size="10" text-anchor="middle">Mid-Journey Reroute Prompt</text>
+
+          <!-- Connector Arrow 3 -> 4 -->
+          <path d="M830 240 L890 240" stroke="#10b981" stroke-width="3" marker-end="url(#arrow)" />
+
+          <!-- Block 4: User Experience -->
+          <rect x="890" y="70" width="180" height="340" rx="16" fill="#1e293b" stroke="rgba(255,255,255,0.2)" stroke-width="2" />
+          <text x="980" y="105" fill="#f8fafc" font-size="14" font-weight="800" text-anchor="middle">4. USER ACTION</text>
+
+          <circle cx="980" cy="160" r="28" fill="#2563eb" />
+          <text x="980" y="165" fill="#ffffff" font-size="18" text-anchor="middle">🖥️</text>
+          <text x="980" y="202" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">Command Center UI</text>
+
+          <circle cx="980" cy="255" r="28" fill="#059669" />
+          <text x="980" y="260" fill="#ffffff" font-size="18" text-anchor="middle">🤖</text>
+          <text x="980" y="297" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">FlowSight AI Copilot</text>
+
+          <circle cx="980" cy="345" r="28" fill="#7c3aed" />
+          <text x="980" y="350" fill="#ffffff" font-size="18" text-anchor="middle">🚨</text>
+          <text x="980" y="387" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">Live Hazard Alerts</text>
+
+          <!-- Markers -->
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#60a5fa" />
+            </marker>
+          </defs>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ── SECTION 3: MULTI-HORIZON PREDICTION MATRIX ── -->
+    <section>
+      <h2 class="section-title">
+        <span>📈 4-Horizon Traffic Prediction Engine</span>
+      </h2>
+      <p class="section-desc">
+        FlowSight models traffic development across 4 distinct future horizons to advise whether a commuter should leave now, detour immediately, or delay their departure.
+      </p>
+
+      <div class="horizons-strip">
+        <div class="horizon-box">
+          <div class="horizon-time">+15 Mins</div>
+          <span class="horizon-status" style="background: rgba(59,130,246,0.2); color: #60a5fa;">Inflow Surge</span>
+          <p class="horizon-desc">
+            Early bottleneck formation. Inflow ramp volume exceeds 1,840 vph. Queue builds to 45 vehicles.
+          </p>
+        </div>
+
+        <div class="horizon-box">
+          <div class="horizon-time">+30 Mins</div>
+          <span class="horizon-status" style="background: rgba(245,158,11,0.2); color: #fbbf24;">Saturation Peak</span>
+          <p class="horizon-desc">
+            Critical saturation. GBDT model projects 850m spillback into adjacent intersection feeder links.
+          </p>
+        </div>
+
+        <div class="horizon-box">
+          <div class="horizon-time">+45 Mins</div>
+          <span class="horizon-status" style="background: rgba(244,63,94,0.2); color: #f43f5e;">Severe Gridlock</span>
+          <p class="horizon-desc">
+            Peak commercial exit density. Speeds collapse to 16 km/h. Detour recommended to save 14 mins.
+          </p>
+        </div>
+
+        <div class="horizon-box">
+          <div class="horizon-time">+60 Mins</div>
+          <span class="horizon-status" style="background: rgba(16,185,129,0.2); color: #34d399;">Recovery Phase</span>
+          <p class="horizon-desc">
+            Volume equilibrium restores. Signal cycles balance queues back down to free-flow baseline.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 4: DIFFERENTIATION MATRIX ── -->
+    <section>
+      <h2 class="section-title">
+        <span>⚖️ Differentiation: Google Maps vs. FlowSight AI</span>
+      </h2>
+      <p class="section-desc">
+        FlowSight is not a navigation replacement — it is the dedicated intelligence and decision-support layer built on top of road routing.
+      </p>
+
+      <div class="comparison-grid">
+        <!-- Google Maps -->
+        <div class="comp-card gmaps">
+          <span class="comp-tag">Standard Navigation Tool</span>
+          <h3 class="comp-title">Google Maps</h3>
+          <div class="comp-core-question">
+            Primary Question: "How do I get there?"
+          </div>
+          <ul class="comp-features-list">
+            <li><span class="bullet-icon">●</span> Finds point-to-point road routes & estimated drive times.</li>
+            <li><span class="bullet-icon">●</span> Displays static color coding (Green/Orange/Red) on roads.</li>
+            <li><span class="bullet-icon">●</span> Offers reactive alternative detour lines without physical telemetry evidence.</li>
+            <li><span class="bullet-icon">●</span> No multi-horizon (+15m, +30m, +45m, +60m) queue propagation forecasts.</li>
+            <li><span class="bullet-icon">●</span> Black-box recommendations without explainable causality.</li>
+          </ul>
+        </div>
+
+        <!-- FlowSight AI -->
+        <div class="comp-card flowsight">
+          <span class="comp-tag">AI Traffic Intelligence Platform</span>
+          <h3 class="comp-title">FlowSight AI</h3>
+          <div class="comp-core-question">
+            Primary Focus: "What is happening, why, what will happen next, and how does the surrounding network impact me?"
+          </div>
+          <ul class="comp-features-list">
+            <li><span class="check-icon">✓</span> <b>Explainable Causality:</b> Cites sensor detectors, municipal permits, lane closures, and saturation metrics.</li>
+            <li><span class="check-icon">✓</span> <b>Predictive 4-Horizon ML:</b> Forecasts queue lengths and travel time deltas up to 60 minutes ahead.</li>
+            <li><span class="check-icon">✓</span> <b>Network Spillback Awareness:</b> Alerts you when congestion on parallel or feeder links threatens your destination.</li>
+            <li><span class="check-icon">✓</span> <b>Live In-Flight Hazard Detection:</b> Autonomous reroute triggers if a sudden incident strikes mid-journey.</li>
+            <li><span class="check-icon">✓</span> <b>Event-Aware Planning:</b> Factors city festivals, sports matches, and monsoon alerts with calibrated delay multipliers.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FOOTER ── -->
+    <footer>
+      <p><b>FlowSight AI</b> — Urban Traffic Intelligence Command Center</p>
+      <p style="margin-top: 6px;">Autonomous Decision-Support · Multi-Horizon ML · OpenStreetMap & Leaflet Integration</p>
+    </footer>
+  </div>
+
+</body>
+</html>

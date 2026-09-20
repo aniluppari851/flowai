@@ -1,0 +1,103 @@
+{
+  "name": "FlowSight AI — 02 Traffic Intelligence & Forecast Refresh",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "traffic-refresh-trigger",
+        "responseMode": "onReceived"
+      },
+      "id": "node-webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 200]
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:8000/api/traffic/current",
+        "method": "GET"
+      },
+      "id": "node-fetch-traffic",
+      "name": "Fetch Current Network State",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [320, 200]
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:8000/api/anomalies",
+        "method": "GET"
+      },
+      "id": "node-fetch-anomalies",
+      "name": "Fetch Active Anomalies",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [540, 200]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "sync_status",
+              "value": "COMPLETED"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{ $json.timestamp }}"
+            }
+          ],
+          "number": [
+            {
+              "name": "anomalies_detected",
+              "value": "={{ $json.count }}"
+            }
+          ]
+        }
+      },
+      "id": "node-sync-supabase",
+      "name": "Sync State to Dashboard",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [760, 200]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch Current Network State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Current Network State": {
+      "main": [
+        [
+          {
+            "node": "Fetch Active Anomalies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Active Anomalies": {
+      "main": [
+        [
+          {
+            "node": "Sync State to Dashboard",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {}
+}

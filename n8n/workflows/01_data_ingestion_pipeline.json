@@ -1,0 +1,137 @@
+{
+  "name": "FlowSight AI — 01 Data Ingestion & Validation Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "id": "node-cron-trigger",
+      "name": "Every 5 Minutes Cron",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [100, 200]
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:8000/api/data-quality",
+        "method": "GET"
+      },
+      "id": "node-check-quality",
+      "name": "Check Data Quality",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [320, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.total_datasets_validated }}",
+              "operation": "equal",
+              "value2": 17
+            }
+          ]
+        }
+      },
+      "id": "node-verify-integrity",
+      "name": "Verify 17 Datasets Validated",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [540, 200]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "status",
+              "value": "SUCCESS"
+            },
+            {
+              "name": "message",
+              "value": "All 17 organizer datasets validated with 0 data loss."
+            }
+          ]
+        }
+      },
+      "id": "node-log-success",
+      "name": "Pipeline Ready Log",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [760, 160]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "status",
+              "value": "HALT"
+            },
+            {
+              "name": "alert",
+              "value": "Data integrity violation detected! Pipeline halted."
+            }
+          ]
+        }
+      },
+      "id": "node-halt-pipeline",
+      "name": "Halt Pipeline Alert",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [760, 280]
+    }
+  ],
+  "connections": {
+    "Every 5 Minutes Cron": {
+      "main": [
+        [
+          {
+            "node": "Check Data Quality",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Data Quality": {
+      "main": [
+        [
+          {
+            "node": "Verify 17 Datasets Validated",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify 17 Datasets Validated": {
+      "main": [
+        [
+          {
+            "node": "Pipeline Ready Log",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Halt Pipeline Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {}
+}

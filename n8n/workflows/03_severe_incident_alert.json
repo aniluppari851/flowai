@@ -1,0 +1,109 @@
+{
+  "name": "FlowSight AI — 03 Severe Incident & Spillback Alert",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 2
+            }
+          ]
+        }
+      },
+      "id": "node-schedule-2m",
+      "name": "Every 2 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [100, 200]
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:8000/api/anomalies",
+        "method": "GET"
+      },
+      "id": "node-get-anomalies",
+      "name": "Fetch Anomalies",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [320, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.count }}",
+              "operation": "larger",
+              "value2": 0
+            }
+          ]
+        }
+      },
+      "id": "node-filter-critical",
+      "name": "Critical Anomaly Detected?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [540, 200]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "alert_level",
+              "value": "CRITICAL"
+            },
+            {
+              "name": "notification",
+              "value": "Severe anomaly detected. Diversion simulation recommended."
+            }
+          ]
+        }
+      },
+      "id": "node-dispatch-alert",
+      "name": "Dispatch Alert Dossier",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [760, 160]
+    }
+  ],
+  "connections": {
+    "Every 2 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Fetch Anomalies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Anomalies": {
+      "main": [
+        [
+          {
+            "node": "Critical Anomaly Detected?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Critical Anomaly Detected?": {
+      "main": [
+        [
+          {
+            "node": "Dispatch Alert Dossier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {}
+}
